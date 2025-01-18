@@ -81,16 +81,25 @@ class Board:
                 if curr_space != 0 and curr_space.colour == colour:
                     count += 1
                     return check_space(curr_row, curr_col, x_step, y_step, count)
+                return count
             else:
                 return count
 
         def check_diagonally():
-            print(check_space(row, col, 1, -1, 1))
-            print()
-            print(check_space(row, col, -1, 1, 1))
-            print()
+            count = (
+                1 + check_space(row, col, 1, -1, 0) + check_space(row, col, -1, 1, 0)
+            )
+            if count >= 4:
+                return True
 
-        check_diagonally()
+            count = (
+                1 + check_space(row, col, -1, -1, 0) + check_space(row, col, 1, 1, 0)
+            )
+            if count >= 4:
+                return True
+
+        if check_diagonally():
+            return True
         if check_vertical():
             return True
 
