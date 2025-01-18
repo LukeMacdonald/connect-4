@@ -40,7 +40,6 @@ class Board:
 
     def check(self, row, col, colour):
         # todo: check horiztonal
-        # todo: check vertical
         # todo: check diagonal
 
         def check_vertical():
@@ -60,12 +59,22 @@ class Board:
         print()
 
         def check_horizontal():
+            count = 0
             for i in range(len(self.board[row])):
-                print(self.board[row][i], end=" ")
-            print()
+                if self.board[row][i] == 0:
+                    count = 0
+                else:
+                    if self.board[row][i].colour == colour:
+                        count += 1
+                    else:
+                        count = 0
+                if count == 4:
+                    return True
+            return count == 4
 
         if check_vertical():
             return True
 
-        check_horizontal()
+        if check_horizontal():
+            return True
         return False
