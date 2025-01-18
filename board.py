@@ -39,8 +39,6 @@ class Board:
         return -1, -1
 
     def check(self, row, col, colour):
-        # todo: check horiztonal
-        # todo: check diagonal
 
         def check_vertical():
             count = 0
@@ -56,8 +54,6 @@ class Board:
                     return True
             return count == 4
 
-        print()
-
         def check_horizontal():
             count = 0
             for i in range(len(self.board[row])):
@@ -72,9 +68,33 @@ class Board:
                     return True
             return count == 4
 
+        def check_space(temp_row, temp_col, x_step, y_step, count):
+            curr_row = temp_row + y_step
+            curr_col = temp_col + x_step
+            if (
+                curr_row >= 0
+                and curr_col >= 0
+                and curr_row < self.rows
+                and curr_col < self.cols
+            ):
+                curr_space = self.board[curr_row][curr_col]
+                if curr_space != 0 and curr_space.colour == colour:
+                    count += 1
+                    return check_space(curr_row, curr_col, x_step, y_step, count)
+            else:
+                return count
+
+        def check_diagonally():
+            print(check_space(row, col, 1, -1, 1))
+            print()
+            print(check_space(row, col, -1, 1, 1))
+            print()
+
+        check_diagonally()
         if check_vertical():
             return True
 
         if check_horizontal():
             return True
+
         return False
