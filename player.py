@@ -15,3 +15,6 @@ class Player:
 
     def remove_token(self):
         return self.tokens.pop(0)
+
+    def has_tokens(self):
+        return len(self.tokens) > 0
