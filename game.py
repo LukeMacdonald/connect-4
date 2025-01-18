@@ -41,8 +41,13 @@ def play_game(p1, p2, board):
         else:
             token = current_player.remove_token()
             print(board)
-            board.place_token(token)
+            placed_row, placed_col = board.place_token(token)
 
+            win = board.check(placed_row, placed_col, current_player.colour)
+            if win:
+                print(f"Player {current_player.name} has won!")
+                print(board)
+                return
             current_player, other_player = swap_player(current_player, other_player)
             print(current_player)
 

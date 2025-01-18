@@ -1,3 +1,6 @@
+from utils import PlayerColour
+
+
 class Board:
     def __init__(self, rows, cols):
         self.rows = rows
@@ -32,5 +35,37 @@ class Board:
         for i in range(len(self.board) - 1, -1, -1):
             if self.board[i][selected_col] == 0:
                 self.board[i][selected_col] = token
-                return True
+                return i, selected_col
+        return -1, -1
+
+    def check(self, row, col, colour):
+        # todo: check horiztonal
+        # todo: check vertical
+        # todo: check diagonal
+
+        def check_vertical():
+            count = 0
+            for i in range(len(self.board)):
+                if self.board[i][col] == 0:
+                    count = 0
+                else:
+                    if self.board[i][col].colour == colour:
+                        count += 1
+                    else:
+                        count = 0
+                if count == 4:
+                    return True
+            return count == 4
+
+        print()
+
+        def check_horizontal():
+            for i in range(len(self.board[row])):
+                print(self.board[row][i], end=" ")
+            print()
+
+        if check_vertical():
+            return True
+
+        check_horizontal()
         return False
