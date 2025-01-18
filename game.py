@@ -39,6 +39,7 @@ def play_game(p1, p2, board):
         if not current_player.has_tokens():
             current_player, other_player = swap_player(current_player, other_player)
         token = current_player.remove_token()
+        print(board)
         board.place_token(2, token)
         print(board)
         current_player, other_player = swap_player(current_player, other_player)
