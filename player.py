@@ -7,5 +7,11 @@ class Player:
         self.colour = colour
         self.tokens = tokens
 
+    def __str__(self):
+        name = f"Name: {self.name}"
+        colour = f"Color: {self.colour.name}"
+        total_tokens = f"Tokens Left: {len(self.tokens)}"
+        return f"{name}\n{colour}\n{total_tokens}"
+
     def remove_token(self):
         return self.tokens.pop(0)
