@@ -35,15 +35,18 @@ def init_game():
 def play_game(p1, p2, board):
     current_player = p1
     other_player = p2
-    for _ in range(ROWS):
+    while current_player.has_tokens() or other_player.has_tokens():
         if not current_player.has_tokens():
             current_player, other_player = swap_player(current_player, other_player)
-        token = current_player.remove_token()
-        print(board)
-        board.place_token(2, token)
-        print(board)
-        current_player, other_player = swap_player(current_player, other_player)
-        print(current_player)
+        else:
+            token = current_player.remove_token()
+            print(board)
+            selected_col = int(input("Enter Column to place token: "))
+            while selected_col < 0 or selected_col > COLS - 1:
+                selected_col = int(input("Enter Column to place token: "))
+            board.place_token(selected_col, token)
+            current_player, other_player = swap_player(current_player, other_player)
+            print(current_player)
 
 
 p1, p2, board = init_game()

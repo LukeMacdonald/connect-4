@@ -16,7 +16,7 @@ class Board:
         return board_str
 
     def place_token(self, col, token):
-        for i in range(len(self.board) - 1, 0, -1):
+        for i in range(len(self.board) - 1, -1, -1):
             if self.board[i][col] == 0:
                 self.board[i][col] = token
                 return True
