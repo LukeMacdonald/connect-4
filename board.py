@@ -15,9 +15,22 @@ class Board:
             board_str += "\n"
         return board_str
 
-    def place_token(self, col, token):
+    def check_col(self, col):
+        if col < 0 or col > self.cols - 1:
+            print("Column selected must be between 0 and {self.cols - 1}")
+            return False
+        if self.board[0][col] != 0:
+            print("Select Colum is full")
+            return False
+        return True
+
+    def place_token(self, token):
+        selected_col = int(input("Enter Column to place token: "))
+        while not self.check_col(selected_col):
+            selected_col = int(input("Enter Column to place token: "))
+
         for i in range(len(self.board) - 1, -1, -1):
-            if self.board[i][col] == 0:
-                self.board[i][col] = token
+            if self.board[i][selected_col] == 0:
+                self.board[i][selected_col] = token
                 return True
         return False
