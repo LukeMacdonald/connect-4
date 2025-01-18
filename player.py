@@ -6,5 +6,6 @@ class Player:
         self.name = name
         self.colour = colour
         self.tokens = tokens
+
     def remove_token(self):
         return self.tokens.pop(0)
