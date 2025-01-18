@@ -20,17 +20,19 @@ class Board:
 
     def check_col(self, col):
         if col < 0 or col > self.cols - 1:
-            print("Column selected must be between 0 and {self.cols - 1}")
+            print(f"Column selected must be between 0 and {self.cols - 1}")
             return False
         if self.board[0][col] != 0:
             print("Select Colum is full")
             return False
         return True
 
-    def place_token(self, token):
-        selected_col = int(input("Enter Column to place token: "))
+    def place_token(self, token, player):
+        selected_col = int(input(f"{player}, choose a column (0-{self.cols - 1}): "))
         while not self.check_col(selected_col):
-            selected_col = int(input("Enter Column to place token: "))
+            selected_col = int(
+                input(f"{player}, choose a column (0-{self.cols - 1}): ")
+            )
 
         for i in range(len(self.board) - 1, -1, -1):
             if self.board[i][selected_col] == 0:
