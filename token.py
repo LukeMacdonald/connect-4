@@ -6,5 +6,7 @@ class Token:
         self.colour = colour
         self.placed = placed
 
-    def get_color(self):
-        return self.colour
+    def __str__(self):
+        if self.colour == PlayerColour.RED:
+            return "R"
+        return "Y"
