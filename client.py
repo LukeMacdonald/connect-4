@@ -1,22 +1,31 @@
 import socket
 
 
-def join_game(server_host="192.168.0.28", server_port=65432):
-    # Create a socket object
+def join_game(host="192.168.0.28", port=65432):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect((host, port))
+    print("Connected to server.")
 
-    # Connect to the server
-    client_socket.connect((server_host, server_port))
+    try:
+        while True:
+            # Get user input
+            message = input("Enter message (type 'exit' to quit): ")
 
-    # Receive and print the welcome message from the server
-    welcome_msg = client_socket.recv(1024)
-    print(f"Received from server: {welcome_msg.decode()}")
+            # Send the message
+            client_socket.sendall(message.encode())
 
-    # Send a message to the server
-    client_socket.send(b"Hello from the client!")
+            # Exit if the message is "exit"
+            if message.strip().lower() == "exit":
+                print("Exiting client.")
+                break
 
-    # Close the connection
-    client_socket.close()
+            # Receive the server's response
+            response = client_socket.recv(1024).decode()
+            print(f"Server: {response}")
+    finally:
+        client_socket.close()
+        print("Connection closed.")
+    # Create a socket objec
 
 
 join_game()

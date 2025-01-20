@@ -11,19 +11,29 @@ def start_game(host="0.0.0.0", port=65432):
     print("Waiting for a connection...")
 
     # Accept the connection (blocks until a connection is made)
-    client_socket, client_address = server_socket.accept()
-    print(f"Connection established with {client_address}")
+    conn, addr = server_socket.accept()
+    print(f"Connection established with {addr}")
+    try:
+        while True:
+            # Receive data
+            data = conn.recv(1024).decode()
+            if not data:  # Connection closed by client
+                break
 
-    # Send a welcome message
-    client_socket.send(b"Hello from the server!")
+            print(f"Received: {data}")
 
-    # Receive data from the client (max buffer size is 1024 bytes)
-    data = client_socket.recv(1024)
-    print(f"Received from client: {data.decode()}")
-    # Close the connection
+            # Check for a termination condition
+            if data.strip().lower() == "exit":  # Custom condition
+                print("Exit command received. Closing connection.")
+                conn.sendall("Goodbye!".encode())
+                break
 
-    client_socket.close()
-    server_socket.close()
+            # Echo the data back to the client (optional)
+            conn.sendall(f"Echo: {data}".encode())
+    finally:
+        conn.close()  # Close the connection
+        server_socket.close()
+        print("Server closed.")
 
 
 start_game()
