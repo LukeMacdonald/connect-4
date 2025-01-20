@@ -1,7 +1,21 @@
+import json
 import socket
+
+import board
+from board import Board
+from game import COLS, ROWS, TOTAL_TOKENS, create_player
+from utils import PlayerColour
 
 
 def start_game(host="0.0.0.0", port=65432):
+    print("\nInitializing the game...")
+    name1 = input("Enter Player 1 Name: ").strip()
+    print("Creating Player 1...")
+    player1 = create_player(name1, PlayerColour.RED, TOTAL_TOKENS)
+    print(player1)
+    board = Board(ROWS, COLS)
+    game_data = {"player1": player1.to_dict(), "board": board.to_dict()}
+
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind(((host, port)))
     print(f"Server started at {host}:{port}")
@@ -21,15 +35,17 @@ def start_game(host="0.0.0.0", port=65432):
                 break
 
             print(f"Received: {data}")
-
+            json_data = json.loads(data)
+            if "player2" not in json_data:
+                break
+            print(json_data)
+            game_data["player2"] = json_data["player2"]
             # Check for a termination condition
             if data.strip().lower() == "exit":  # Custom condition
                 print("Exit command received. Closing connection.")
                 conn.sendall("Goodbye!".encode())
                 break
-
-            # Echo the data back to the client (optional)
-            conn.sendall(f"Echo: {data}".encode())
+            conn.sendall(json.dumps(game_data).encode())
     finally:
         conn.close()  # Close the connection
         server_socket.close()
