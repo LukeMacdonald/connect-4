@@ -18,6 +18,9 @@ class Board:
             board_str += "\n"
         return board_str
 
+    def to_dict(self):
+        return {"rows": self.rows, "cols": self.cols, "board": self.board}
+
     def check_col(self, col):
         if col < 0 or col > self.cols - 1:
             print(f"Column selected must be between 0 and {self.cols - 1}")
