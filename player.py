@@ -13,6 +13,11 @@ class Player:
         total_tokens = f"Tokens Left: {len(self.tokens)}"
         return f"{name}\n{colour}\n{total_tokens}"
 
+    def to_dict(self):
+        return {
+            "name": self.name,
+        }
+
     def remove_token(self):
         return self.tokens.pop(0)
 
