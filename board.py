@@ -1,6 +1,6 @@
 from token import Token
 
-from utils import PlayerColour
+from utils import PlayerColour, token_from_dict
 
 
 class Board:
@@ -27,6 +27,15 @@ class Board:
             for row in self.board
         ]
         return {"rows": self.rows, "cols": self.cols, "board": board_dict}
+
+    def from_dict(self, new_board):
+        self.board = [
+            [
+                (Token(token_from_dict(cell), True) if isinstance(cell, dict) else cell)
+                for cell in row
+            ]
+            for row in new_board
+        ]
 
     def check_col(self, col):
         if col < 0 or col > self.cols - 1:

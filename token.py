@@ -12,9 +12,3 @@ class Token:
 
     def to_dict(self):
         return {"colour": self.colour.name}
-
-    def from_dict(self, data):
-        if data["colour"] == PlayerColour.RED.name:
-            self.colour = PlayerColour.RED
-        else:
-            self.colour = PlayerColour.YELLOW

@@ -1,6 +1,7 @@
 import json
 import socket
 
+from board import Board
 from game import TOTAL_TOKENS, create_player
 from utils import PlayerColour
 
@@ -27,8 +28,14 @@ def join_game(host="192.168.0.15", port=65433):
 
         while True:
             # Receive and decode the server's response
-            response = client_socket.recv(1024).decode()
-            print(f"Server: {response}")
+            data = client_socket.recv(1024).decode()
+            json_data = json.loads(data)
+            if "board" in json_data:
+                board_json = json_data["board"]
+                board = Board(board_json["rows"], board_json["cols"])
+                board.from_dict(board_json["board"])
+                print(board)
+
     finally:
         client_socket.close()
         print("Connection closed.")
