@@ -50,6 +50,11 @@ def start_game(host="0.0.0.0", port=65433):
                 conn.sendall("Goodbye!".encode())
                 break
 
+            if "board" in json_data:
+                board_json = json_data["board"]
+                board = Board(board_json["rows"], board_json["cols"])
+                board.from_dict(board_json["board"])
+
             print(board)
 
             # Place the token and check for a win

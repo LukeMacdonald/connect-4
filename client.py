@@ -35,6 +35,16 @@ def join_game(host="192.168.0.15", port=65433):
                 board = Board(board_json["rows"], board_json["cols"])
                 board.from_dict(board_json["board"])
                 print(board)
+                token = player2.remove_token()
+                placed_row, placed_col = board.place_token(token, player2.name)
+                json_data["board"] = board.to_dict()
+                win = board.check(placed_row, placed_col, player2.colour)
+                if win:
+                    print("Congradulations you've won")
+                    json_data["status"] = "finished"
+                    client_socket.sendall(json.dumps(json_data).encode())
+                    break
+                client_socket.sendall(json.dumps(json_data).encode())
 
     finally:
         client_socket.close()
