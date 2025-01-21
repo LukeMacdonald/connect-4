@@ -5,7 +5,7 @@ from game import TOTAL_TOKENS, create_player
 from utils import PlayerColour
 
 
-def join_game(host="192.168.0.28", port=65432):
+def join_game(host="192.168.0.15", port=65433):
     # Get Player 2 details and create the player object
     name1 = input("Enter Player 2 Name: ").strip()
     print("Creating Player 2...")

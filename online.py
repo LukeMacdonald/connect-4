@@ -7,14 +7,18 @@ from game import COLS, ROWS, TOTAL_TOKENS, create_player
 from utils import PlayerColour
 
 
-def start_game(host="0.0.0.0", port=65432):
+def start_game(host="0.0.0.0", port=65433):
     print("\nInitializing the game...")
     name1 = input("Enter Player 1 Name: ").strip()
     print("Creating Player 1...")
     player1 = create_player(name1, PlayerColour.RED, TOTAL_TOKENS)
     print(player1)
     board = Board(ROWS, COLS)
-    game_data = {"player1": player1.to_dict(), "board": board.to_dict()}
+    game_data = {
+        "player1": player1.to_dict(),
+        "board": board.to_dict(),
+        "status": "continue",
+    }
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind(((host, port)))
@@ -44,6 +48,19 @@ def start_game(host="0.0.0.0", port=65432):
             if data.strip().lower() == "exit":  # Custom condition
                 print("Exit command received. Closing connection.")
                 conn.sendall("Goodbye!".encode())
+                break
+
+            print(board)
+
+            # Place the token and check for a win
+            token = player1.remove_token()
+            placed_row, placed_col = board.place_token(token, player1.name)
+            game_data["board"] = board.to_dict()
+            win = board.check(placed_row, placed_col, player1.colour)
+            if win:
+                print("Congradulations you've won")
+                game_data["status"] = "finished"
+                conn.sendall(json.dumps(game_data).encode())
                 break
             conn.sendall(json.dumps(game_data).encode())
     finally:

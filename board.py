@@ -1,3 +1,5 @@
+from token import Token
+
 from utils import PlayerColour
 
 
@@ -19,7 +21,12 @@ class Board:
         return board_str
 
     def to_dict(self):
-        return {"rows": self.rows, "cols": self.cols, "board": self.board}
+        # Create a new representation of the board to avoid modifying the original
+        board_dict = [
+            [cell.to_dict() if isinstance(cell, Token) else cell for cell in row]
+            for row in self.board
+        ]
+        return {"rows": self.rows, "cols": self.cols, "board": board_dict}
 
     def check_col(self, col):
         if col < 0 or col > self.cols - 1:
