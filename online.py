@@ -1,12 +1,15 @@
 import json
 import socket
 
-from board import Board
-from player_colour import PlayerColour
-from utils import COLS, ROWS, TOTAL_TOKENS, create_player
+from objects.board import Board
+from objects.helpers import create_player
+from objects.player_colour import PlayerColour
+from utils.constants import COLS, ROWS, TOTAL_TOKENS
+from utils.sockets import get_private_ip
 
 
 def start_game(host="0.0.0.0", port=65433):
+    host = get_private_ip()
     print("\nInitializing the game...")
     name1 = input("Enter Player 1 Name: ").strip()
     print("Creating Player 1...")

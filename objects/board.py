@@ -1,6 +1,5 @@
-from token import Token
-
-from utils import PlayerColour, token_from_dict
+from objects.helpers import token_from_dict
+from objects.token import Token
 
 
 class Board:

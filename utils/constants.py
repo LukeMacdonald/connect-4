@@ -1,0 +1,3 @@
+ROWS = 6
+COLS = 7
+TOTAL_TOKENS = (ROWS * COLS) // 2

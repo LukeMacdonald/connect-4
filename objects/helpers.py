@@ -1,11 +1,6 @@
-from token import Token
-
-from player import Player
-from player_colour import PlayerColour
-
-ROWS = 6
-COLS = 7
-TOTAL_TOKENS = (ROWS * COLS) // 2
+from objects.player import Player
+from objects.player_colour import PlayerColour
+from objects.token import Token
 
 
 def token_from_dict(data):
@@ -20,3 +15,10 @@ def create_player(name: str, colour: PlayerColour, num_tokens: int):
     """
     tokens = [Token(colour, False) for _ in range(num_tokens)]
     return Player(name, colour, tokens)
+
+
+def swap_player(current, other):
+    """
+    Swap the current player with the other player.
+    """
+    return other, current

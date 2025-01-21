@@ -1,10 +1,8 @@
-from token import Token
-
-from board import Board
+from objects.board import Board
+from objects.helpers import create_player, swap_player
+from objects.player_colour import PlayerColour
 from online import join_game, start_game
-from player import Player
-from player_colour import PlayerColour
-from utils import COLS, ROWS, TOTAL_TOKENS, create_player
+from utils.constants import COLS, ROWS, TOTAL_TOKENS
 
 
 def menu():
@@ -26,21 +24,6 @@ def menu():
                 print("Invalid choice. Please choose a valid option.")
         except ValueError:
             print("Invalid input. Please enter a number.")
-
-
-def create_player(name: str, colour: PlayerColour, num_tokens: int):
-    """
-    Create a player with the specified name, colour, and number of tokens.
-    """
-    tokens = [Token(colour, False) for _ in range(num_tokens)]
-    return Player(name, colour, tokens)
-
-
-def swap_player(current, other):
-    """
-    Swap the current player with the other player.
-    """
-    return other, current
 
 
 def init_game():
