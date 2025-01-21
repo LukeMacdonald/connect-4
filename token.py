@@ -1,4 +1,4 @@
-from utils import PlayerColour
+from player_colour import PlayerColour
 
 
 class Token:

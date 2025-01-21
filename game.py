@@ -1,12 +1,10 @@
 from token import Token
 
 from board import Board
+from online import join_game, start_game
 from player import Player
-from utils import PlayerColour
-
-ROWS = 6
-COLS = 7
-TOTAL_TOKENS = (ROWS * COLS) // 2
+from player_colour import PlayerColour
+from utils import COLS, ROWS, TOTAL_TOKENS, create_player
 
 
 def menu():
@@ -103,6 +101,10 @@ if __name__ == "__main__":
         if choice == 1:
             p1, p2, board = init_game()
             play_game(p1, p2, board)
+        elif choice == 2:
+            start_game()
+        elif choice == 3:
+            join_game()
         elif choice == 4:
             print("Exiting the game. Goodbye!")
             break
