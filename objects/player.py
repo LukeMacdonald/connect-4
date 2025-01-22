@@ -23,3 +23,8 @@ class Player:
 
     def has_tokens(self):
         return len(self.tokens) > 0
+
+
+class Computer(Player):
+    def best_move(self):
+        pass

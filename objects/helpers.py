@@ -1,5 +1,5 @@
 from objects.enums import PlayerColour
-from objects.player import Player
+from objects.player import Computer, Player
 from objects.token import Token
 
 
@@ -15,6 +15,12 @@ def create_player(name: str, colour: PlayerColour, num_tokens: int):
     """
     tokens = [Token(colour, False) for _ in range(num_tokens)]
     return Player(name, colour, tokens)
+
+
+def create_computer(num_tokens: int):
+    colour = PlayerColour.YELLOW
+    tokens = [Token(colour, False) for _ in range(num_tokens)]
+    return Computer("AI", colour, tokens)
 
 
 def swap_player(current, other):

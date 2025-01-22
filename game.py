@@ -1,6 +1,7 @@
 from objects.board import Board
 from objects.enums import GameOptions, PlayerColour
-from objects.helpers import create_player, swap_player
+from objects.helpers import create_computer, create_player, swap_player
+from objects.player import Computer, Player
 from online import join_game, start_game
 from utils.constants import COLS, ROWS, TOTAL_TOKENS
 
@@ -45,7 +46,7 @@ def init_game(option: GameOptions):
         player2 = create_player(name2, PlayerColour.YELLOW, TOTAL_TOKENS)
         print(player2)
     if option == GameOptions.COMPUTER:
-        player2 = create_player("AI", PlayerColour.YELLOW, TOTAL_TOKENS)
+        player2 = create_computer(TOTAL_TOKENS)
 
     board = Board(ROWS, COLS)
     print("Game board created:\n")
@@ -53,11 +54,10 @@ def init_game(option: GameOptions):
     return player1, player2, board
 
 
-def play_game(p1, p2, board):
+def play_game(current_player, other_player, board):
     """
     Main game loop to handle the Connect 4 gameplay.
     """
-    current_player, other_player = p1, p2
     while True:
         print(f"\n{current_player.name}'s turn ({current_player.colour.name})")
         print(board)
@@ -83,6 +83,12 @@ def play_game(p1, p2, board):
         current_player, other_player = swap_player(current_player, other_player)
 
 
+def play_computer(player: Player, computer: Computer, board: Board):
+    print(player)
+    print(computer)
+    print(board)
+
+
 # Main program execution
 if __name__ == "__main__":
     while True:
@@ -92,13 +98,19 @@ if __name__ == "__main__":
             play_game(p1, p2, board)
         elif choice == 2:
             p1, _, board = init_game(GameOptions.ONLINE)
+            if not isinstance(p1, Player):
+                break
             start_game(p1, board)
         elif choice == 3:
             _, p2, _ = init_game(GameOptions.JOIN)
+            if not isinstance(p2, Player):
+                break
             join_game(p2)
         elif choice == 4:
             p1, computer, board = init_game(GameOptions.COMPUTER)
-
+            if not isinstance(p1, Player) or isinstance(computer, Computer):
+                break
+            play_computer(p1, computer, board)
         elif choice == 5:
             print("Exiting the game. Goodbye!")
             break
