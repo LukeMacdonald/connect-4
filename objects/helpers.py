@@ -1,3 +1,4 @@
+from objects.board import Board
 from objects.enums import PlayerColour
 from objects.player import Computer, Player
 from objects.token import Token
@@ -28,3 +29,10 @@ def swap_player(current, other):
     Swap the current player with the other player.
     """
     return other, current
+
+
+def copy_board(board):
+    """Create a deep copy of the board."""
+    new_board = Board(board.rows, board.cols)
+    new_board.from_dict(board.to_dict()["board"])
+    return new_board
