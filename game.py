@@ -95,8 +95,15 @@ def play_computer(player: Player, computer: Computer, board: Board):
         print(board)
         computer_token = computer.remove_token()
         selected_col = computer.best_move(board)
-        board.place_token(computer_token, selected_col)
+        placed_row, placed_col = board.place_token(computer_token, selected_col)
+        print(f"Computer has placed token in column: {selected_col}")
         print(board)
+        win = board.check(placed_row, placed_col, computer.colour)
+        if win:
+            print(
+                "\n Sorry you have lost against the machines!\nBetter luck next time!"
+            )
+            return
 
 
 # Main program execution
