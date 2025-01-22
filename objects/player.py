@@ -2,7 +2,7 @@ import math
 import random
 
 from objects.board import Board
-from objects.enums import PlayerColour
+from objects.enums import PlayerColour, PlayerTypes
 from objects.token import Token
 
 
@@ -50,7 +50,7 @@ class Computer(Player):
         if maximizing_player:
             max_eval = -math.inf
             for col in range(board.cols):
-                if board.is_valid_column(col):
+                if board.is_valid_column(col, PlayerTypes.COMPUTER):
                     temp_board = board.copy()
                     row, _ = temp_board.place_token(Token(computer_colour, True), col)
                     eval_score = self.minimax(
@@ -70,7 +70,7 @@ class Computer(Player):
         else:
             min_eval = math.inf
             for col in range(board.cols):
-                if board.is_valid_column(col):
+                if board.is_valid_column(col, PlayerTypes.COMPUTER):
                     # Simulate placing the player's token
                     temp_board = board.copy()
                     row, _ = temp_board.place_token(Token(PlayerColour.RED, True), col)
@@ -93,7 +93,7 @@ class Computer(Player):
         best_score = -math.inf
         best_col = random.choice(range(board.cols))
         for col in range(board.cols):
-            if board.is_valid_column(col):
+            if board.is_valid_column(col, PlayerTypes.COMPUTER):
                 temp_board = board.copy()
                 row, _ = temp_board.place_token(Token(self.colour, True), col)
                 score = self.minimax(

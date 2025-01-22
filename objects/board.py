@@ -1,3 +1,4 @@
+from objects.enums import PlayerTypes
 from objects.token import Token
 
 
@@ -45,13 +46,15 @@ class Board:
             for row in new_board
         ]
 
-    def is_valid_column(self, col):
+    def is_valid_column(self, col, player_type: PlayerTypes):
         """Check if the column is within range and not full."""
         if col < 0 or col >= self.cols:
-            print(f"Column must be between 0 and {self.cols - 1}.")
+            if player_type == PlayerTypes.PLAYER:
+                print(f"Column must be between 0 and {self.cols - 1}.")
             return False
         if self.board[0][col] != 0:
-            print("Column is full. Choose a different column.")
+            if player_type == PlayerTypes.PLAYER:
+                print("Column is full. Choose a different column.")
             return False
         return True
 
@@ -69,7 +72,7 @@ class Board:
                 selected_col = int(
                     input(f"{player}, choose a column (0-{self.cols - 1}): ")
                 )
-                if self.is_valid_column(selected_col):
+                if self.is_valid_column(selected_col, PlayerTypes.PLAYER):
                     break
             except ValueError:
                 print("Invalid input. Please enter a valid column number.")

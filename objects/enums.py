@@ -11,3 +11,8 @@ class GameOptions(Enum):
     ONLINE = 2
     JOIN = 3
     COMPUTER = 4
+
+
+class PlayerTypes(Enum):
+    PLAYER = 1
+    COMPUTER = 2
