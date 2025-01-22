@@ -1,4 +1,3 @@
-from objects.helpers import token_from_dict
 from objects.token import Token
 
 
@@ -17,6 +16,12 @@ class Board:
             board_str += "  ".join(str(cell) if cell else "." for cell in row) + "\n"
         return board_str
 
+    def copy(self):
+        """Create a deep copy of the self."""
+        new_board = Board(self.rows, self.cols)
+        new_board.from_dict(self.to_dict()["board"])
+        return new_board
+
     def to_dict(self):
         return {
             "rows": self.rows,
@@ -30,7 +35,11 @@ class Board:
     def from_dict(self, new_board):
         self.board = [
             [
-                Token(token_from_dict(cell), True) if isinstance(cell, dict) else cell
+                (
+                    Token(Token.token_from_dict(cell), True)
+                    if isinstance(cell, dict)
+                    else cell
+                )
                 for cell in row
             ]
             for row in new_board
@@ -116,3 +125,74 @@ class Board:
             return False
 
         return has_win()
+
+    def evaluate_board(self, computer_token, player_token):
+        score = 0
+
+        def count_tokens(line):
+            computer_count = line.count(computer_token)
+            player_count = line.count(player_token)
+            if computer_count > player_count:
+                return 10**computer_count
+            elif (
+                player_count > 0 and computer_count == 0
+            ):  # Only player tokens in the line
+                return -(10**player_count)
+            return 0
+
+        for row in range(self.rows):
+            for col in range(self.cols):
+                if col + 3 < self.cols:
+                    # Horizontal
+                    line = [
+                        (
+                            self.board[row][col + i].colour
+                            if self.board[row][col + i] != 0
+                            else None
+                        )
+                        for i in range(4)
+                    ]
+                if row + 3 < self.rows:
+                    # Vertical
+                    line = [
+                        (
+                            self.board[row + i][col].colour
+                            if self.board[row + i][col] != 0
+                            else None
+                        )
+                        for i in range(4)
+                    ]
+                    score += count_tokens(line)
+                    if col + 3 < self.cols and row + 3 < self.rows:
+                        # Diagonal (top-left to bottom-right)
+                        line = [
+                            (
+                                self.board[row + i][col + i].colour
+                                if self.board[row + i][col + i] != 0
+                                else None
+                            )
+                            for i in range(4)
+                        ]
+                        score += count_tokens(line)
+                    if col - 3 >= 0 and row + 3 < self.rows:
+                        # Diagonal (top-right to bottom-left)
+                        line = [
+                            (
+                                self.board[row + i][col - i].colour
+                                if self.board[row + i][col - i] != 0
+                                else None
+                            )
+                            for i in range(4)
+                        ]
+                        score += count_tokens(line)
+
+            return score
+
+    def is_terminal_state(self):
+        for row in range(self.rows):
+            for col in range(self.cols):
+                cell = self.board[row][col]
+                if cell != 0 and self.check(row, col, cell.colour):
+                    return True
+        # Check if the board is full
+        return all(self.board[0][col] != 0 for col in range(self.cols))
