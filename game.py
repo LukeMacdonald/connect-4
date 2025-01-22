@@ -87,6 +87,17 @@ def play_computer(player: Player, computer: Computer, board: Board):
     print(player)
     print(computer)
     print(board)
+    while True:
+        player_token = player.remove_token()
+        placed_row, placed_col = board.place_token(player_token, player.name)
+
+        win = board.check(placed_row, placed_col, player.colour)
+        if win:
+            print(f"\nPlayer {player.name} ({player.colour.name}) has won!")
+            print(board)
+            return
+        print(board)
+        computer_token = computer.remove_token()
 
 
 # Main program execution
