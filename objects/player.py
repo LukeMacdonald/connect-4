@@ -3,7 +3,6 @@ import random
 
 from objects.board import Board
 from objects.enums import PlayerColour
-from objects.helpers import copy_board
 from objects.token import Token
 
 
@@ -32,14 +31,80 @@ class Player:
 
 
 class Computer(Player):
+    def __init__(self, name, colour, tokens, depth):
+        super().__init__(name, colour, tokens)
+        self.depth = depth
+
+    def minimax(
+        self,
+        board,
+        depth,
+        alpha,
+        beta,
+        maximizing_player,
+        computer_colour,
+        player_colour,
+    ):
+        if depth == 0 or board.is_terminal_state():
+            return board.evaluate_board(computer_colour, player_colour)
+        if maximizing_player:
+            max_eval = -math.inf
+            for col in range(board.cols):
+                if board.is_valid_column(col):
+                    temp_board = board.copy()
+                    row, _ = temp_board.place_token(Token(computer_colour, True), col)
+                    eval_score = self.minimax(
+                        temp_board,
+                        depth - 1,
+                        alpha,
+                        beta,
+                        False,
+                        computer_colour,
+                        player_colour,
+                    )
+                    max_eval = max(max_eval, eval_score)
+                    alpha = max(alpha, max_eval)
+                    if beta <= alpha:
+                        break
+            return max_eval
+        else:
+            min_eval = math.inf
+            for col in range(board.cols):
+                if board.is_valid_column(col):
+                    # Simulate placing the player's token
+                    temp_board = board.copy()
+                    row, _ = temp_board.place_token(Token(PlayerColour.RED, True), col)
+                    eval_score = self.minimax(
+                        temp_board,
+                        depth - 1,
+                        alpha,
+                        beta,
+                        True,
+                        computer_colour,
+                        player_colour,
+                    )
+                    min_eval = min(min_eval, eval_score)
+                    beta = min(beta, eval_score)
+                    if beta <= alpha:
+                        break
+            return min_eval
+
     def best_move(self, board: Board):
         best_score = -math.inf
         best_col = random.choice(range(board.cols))
         for col in range(board.cols):
             if board.is_valid_column(col):
-                temp_board = copy_board(board)
+                temp_board = board.copy()
                 row, _ = temp_board.place_token(Token(self.colour, True), col)
-                score = -math.inf  # todo: implemented minimax
+                score = self.minimax(
+                    temp_board,
+                    self.depth,
+                    -math.inf,
+                    math.inf,
+                    False,
+                    PlayerColour.YELLOW,
+                    PlayerColour.RED,
+                )  # todo: implemented minimax
                 if score > best_score:
                     best_score = score
                     best_col = col

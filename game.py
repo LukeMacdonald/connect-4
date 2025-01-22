@@ -34,6 +34,7 @@ def init_game(option: GameOptions):
     """
     player1 = None
     player2 = None
+    computer = None
     if option != GameOptions.JOIN:
         print("\nInitializing the game...")
         name1 = input("Enter Player 1 Name: ").strip()
@@ -46,12 +47,12 @@ def init_game(option: GameOptions):
         player2 = create_player(name2, PlayerColour.YELLOW, TOTAL_TOKENS)
         print(player2)
     if option == GameOptions.COMPUTER:
-        player2 = create_computer(TOTAL_TOKENS)
+        computer = create_computer(TOTAL_TOKENS)
 
     board = Board(ROWS, COLS)
     print("Game board created:\n")
     print(board)
-    return player1, player2, board
+    return player1, player2, computer, board
 
 
 def play_game(current_player, other_player, board):
@@ -70,7 +71,6 @@ def play_game(current_player, other_player, board):
         # Place the token and check for a win
         token = current_player.remove_token()
         placed_row, placed_col = board.players_turn(token, current_player.name)
-
         win = board.check(placed_row, placed_col, current_player.colour)
         if win:
             print(
@@ -84,13 +84,9 @@ def play_game(current_player, other_player, board):
 
 
 def play_computer(player: Player, computer: Computer, board: Board):
-    print(player)
-    print(computer)
-    print(board)
     while True:
         player_token = player.remove_token()
         placed_row, placed_col = board.players_turn(player_token, player.name)
-
         win = board.check(placed_row, placed_col, player.colour)
         if win:
             print(f"\nPlayer {player.name} ({player.colour.name}) has won!")
@@ -98,6 +94,9 @@ def play_computer(player: Player, computer: Computer, board: Board):
             return
         print(board)
         computer_token = computer.remove_token()
+        selected_col = computer.best_move(board)
+        board.place_token(computer_token, selected_col)
+        print(board)
 
 
 # Main program execution
@@ -105,21 +104,21 @@ if __name__ == "__main__":
     while True:
         choice = menu()
         if choice == 1:
-            p1, p2, board = init_game(GameOptions.OFFLINE)
+            p1, p2, _, board = init_game(GameOptions.OFFLINE)
             play_game(p1, p2, board)
         elif choice == 2:
-            p1, _, board = init_game(GameOptions.ONLINE)
+            p1, _, _, board = init_game(GameOptions.ONLINE)
             if not isinstance(p1, Player):
                 break
             start_game(p1, board)
         elif choice == 3:
-            _, p2, _ = init_game(GameOptions.JOIN)
+            _, p2, _, _ = init_game(GameOptions.JOIN)
             if not isinstance(p2, Player):
                 break
             join_game(p2)
         elif choice == 4:
-            p1, computer, board = init_game(GameOptions.COMPUTER)
-            if not isinstance(p1, Player) or isinstance(computer, Computer):
+            p1, _, computer, board = init_game(GameOptions.COMPUTER)
+            if not isinstance(p1, Player) or not isinstance(computer, Computer):
                 break
             play_computer(p1, computer, board)
         elif choice == 5:
