@@ -2,10 +2,7 @@ import json
 import socket
 
 from objects.board import Board
-from objects.enums import PlayerColour
-from objects.helpers import create_player
 from objects.player import Player
-from utils.constants import COLS, ROWS, TOTAL_TOKENS
 from utils.sockets import get_private_ip
 
 
@@ -51,7 +48,7 @@ def start_game(player: Player, board: Board, port=65433):
 
                 print(board)
                 token = player.remove_token()
-                placed_row, placed_col = board.place_token(token, player.name)
+                placed_row, placed_col = board.players_turn(token, player.name)
                 game_data["board"] = board.to_dict()
 
                 if board.check(placed_row, placed_col, player.colour):
@@ -95,7 +92,7 @@ def join_game(player: Player, host="192.168.0.15", port=65433):
                     print(board)
 
                     token = player.remove_token()
-                    placed_row, placed_col = board.place_token(token, player.name)
+                    placed_row, placed_col = board.players_turn(token, player.name)
                     json_data["board"] = board.to_dict()
 
                     if board.check(placed_row, placed_col, player.colour):

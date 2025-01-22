@@ -46,7 +46,14 @@ class Board:
             return False
         return True
 
-    def place_token(self, token, player):
+    def place_token(self, token, selected_col):
+        for row in range(self.rows - 1, -1, -1):  # Start from the bottom
+            if self.board[row][selected_col] == 0:
+                self.board[row][selected_col] = token
+                return row, selected_col
+        return -1, -1
+
+    def players_turn(self, token, player):
         """Place a token in the selected column and return its position."""
         while True:
             try:
@@ -57,12 +64,7 @@ class Board:
                     break
             except ValueError:
                 print("Invalid input. Please enter a valid column number.")
-
-        for row in range(self.rows - 1, -1, -1):  # Start from the bottom
-            if self.board[row][selected_col] == 0:
-                self.board[row][selected_col] = token
-                return row, selected_col
-        return -1, -1
+        return self.place_token(token, selected_col)
 
     def check(self, row, col, colour):
         """Check if placing a token at (row, col) results in a win."""

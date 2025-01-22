@@ -69,7 +69,7 @@ def play_game(current_player, other_player, board):
 
         # Place the token and check for a win
         token = current_player.remove_token()
-        placed_row, placed_col = board.place_token(token, current_player.name)
+        placed_row, placed_col = board.players_turn(token, current_player.name)
 
         win = board.check(placed_row, placed_col, current_player.colour)
         if win:
@@ -89,7 +89,7 @@ def play_computer(player: Player, computer: Computer, board: Board):
     print(board)
     while True:
         player_token = player.remove_token()
-        placed_row, placed_col = board.place_token(player_token, player.name)
+        placed_row, placed_col = board.players_turn(player_token, player.name)
 
         win = board.check(placed_row, placed_col, player.colour)
         if win:
