@@ -13,8 +13,8 @@ def menu():
         print("\nConnect 4")
         print("-" * 20)
         print("1: Start a New Game")
-        print("2: Start an Online Game (Not Implemented)")
-        print("3: Join an Online Game (Not Implemented)")
+        print("2: Start an Online Game")
+        print("3: Join an Online Game")
         print("4: Exit")
         try:
             option = int(input("Choose an option: "))
