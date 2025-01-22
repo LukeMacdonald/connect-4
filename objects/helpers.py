@@ -97,3 +97,13 @@ def evaluate_board(board, computer_token, player_token):
                     score += count_tokens(line)
 
         return score
+
+
+def is_terminal_state(board):
+    for row in range(board.rows):
+        for col in range(board.cols):
+            cell = board.board[row][col]
+            if cell != 0 and board.check(row, col, cell.colour):
+                return True
+    # Check if the board is full
+    return all(board.board[0][col] != 0 for col in range(board.cols))
