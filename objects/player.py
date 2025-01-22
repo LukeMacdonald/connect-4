@@ -1,4 +1,4 @@
-from objects.player_colour import PlayerColour
+from objects.enums import PlayerColour
 
 
 class Player:

@@ -2,25 +2,16 @@ import json
 import socket
 
 from objects.board import Board
+from objects.enums import PlayerColour
 from objects.helpers import create_player
-from objects.player_colour import PlayerColour
+from objects.player import Player
 from utils.constants import COLS, ROWS, TOTAL_TOKENS
 from utils.sockets import get_private_ip
 
 
-def start_game(host="0.0.0.0", port=65433):
+def start_game(player: Player, board: Board, port=65433):
     host = get_private_ip()
     print("\nInitializing the game...")
-
-    # Create Player 1
-    player_name = input("Enter Player 1 Name: ").strip()
-    print("Creating Player 1...")
-    player = create_player(player_name, PlayerColour.RED, TOTAL_TOKENS)
-    print(player)
-
-    # Initialize the board
-    board = Board(ROWS, COLS)
-
     game_data = {
         "player1": player.to_dict(),
         "board": board.to_dict(),
@@ -74,14 +65,10 @@ def start_game(host="0.0.0.0", port=65433):
             print("Server closed.")
 
 
-def join_game(host="192.168.0.15", port=65433):
+def join_game(player: Player, host="192.168.0.15", port=65433):
     # Create Player 2
-    player_name = input("Enter Player 2 Name: ").strip()
-    print("Creating Player 2...")
-    player2 = create_player(player_name, PlayerColour.YELLOW, TOTAL_TOKENS)
-    print(player2)
 
-    json_data = {"player2": player2.to_dict()}
+    json_data = {"player2": player.to_dict()}
 
     print("\nJoining the game...")
 
@@ -107,11 +94,11 @@ def join_game(host="192.168.0.15", port=65433):
                     board.from_dict(board_json["board"])
                     print(board)
 
-                    token = player2.remove_token()
-                    placed_row, placed_col = board.place_token(token, player2.name)
+                    token = player.remove_token()
+                    placed_row, placed_col = board.place_token(token, player.name)
                     json_data["board"] = board.to_dict()
 
-                    if board.check(placed_row, placed_col, player2.colour):
+                    if board.check(placed_row, placed_col, player.colour):
                         print("Congratulations, you've won!")
                         json_data["status"] = "finished"
                         client_socket.sendall(json.dumps(json_data).encode())

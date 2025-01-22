@@ -1,5 +1,5 @@
+from objects.enums import PlayerColour
 from objects.player import Player
-from objects.player_colour import PlayerColour
 from objects.token import Token
 
 

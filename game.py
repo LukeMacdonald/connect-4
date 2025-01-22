@@ -1,6 +1,6 @@
 from objects.board import Board
+from objects.enums import GameOptions, PlayerColour
 from objects.helpers import create_player, swap_player
-from objects.player_colour import PlayerColour
 from online import join_game, start_game
 from utils.constants import COLS, ROWS, TOTAL_TOKENS
 
@@ -15,10 +15,11 @@ def menu():
         print("1: Start a New Game")
         print("2: Start an Online Game")
         print("3: Join an Online Game")
-        print("4: Exit")
+        print("4: Play against Computer")
+        print("5: Exit")
         try:
             option = int(input("Choose an option: "))
-            if option in [1, 2, 3, 4]:
+            if option in [1, 2, 3, 4, 5]:
                 return option
             else:
                 print("Invalid choice. Please choose a valid option.")
@@ -26,20 +27,25 @@ def menu():
             print("Invalid input. Please enter a number.")
 
 
-def init_game():
+def init_game(option: GameOptions):
     """
     Initialize the game by creating players and the game board.
     """
-    print("\nInitializing the game...")
-    name1 = input("Enter Player 1 Name: ").strip()
-    print("Creating Player 1...")
-    player1 = create_player(name1, PlayerColour.RED, TOTAL_TOKENS)
-    print(player1)
-
-    name2 = input("Enter Player 2 Name: ").strip()
-    print("Creating Player 2...")
-    player2 = create_player(name2, PlayerColour.YELLOW, TOTAL_TOKENS)
-    print(player2)
+    player1 = None
+    player2 = None
+    if option != GameOptions.JOIN:
+        print("\nInitializing the game...")
+        name1 = input("Enter Player 1 Name: ").strip()
+        print("Creating Player 1...")
+        player1 = create_player(name1, PlayerColour.RED, TOTAL_TOKENS)
+        print(player1)
+    if option == GameOptions.OFFLINE or option == GameOptions.JOIN:
+        name2 = input("Enter Player 2 Name: ").strip()
+        print("Creating Player 2...")
+        player2 = create_player(name2, PlayerColour.YELLOW, TOTAL_TOKENS)
+        print(player2)
+    if option == GameOptions.COMPUTER:
+        player2 = create_player("AI", PlayerColour.YELLOW, TOTAL_TOKENS)
 
     board = Board(ROWS, COLS)
     print("Game board created:\n")
@@ -82,13 +88,18 @@ if __name__ == "__main__":
     while True:
         choice = menu()
         if choice == 1:
-            p1, p2, board = init_game()
+            p1, p2, board = init_game(GameOptions.OFFLINE)
             play_game(p1, p2, board)
         elif choice == 2:
-            start_game()
+            p1, _, board = init_game(GameOptions.ONLINE)
+            start_game(p1, board)
         elif choice == 3:
-            join_game()
+            _, p2, _ = init_game(GameOptions.JOIN)
+            join_game(p2)
         elif choice == 4:
+            p1, computer, board = init_game(GameOptions.COMPUTER)
+
+        elif choice == 5:
             print("Exiting the game. Goodbye!")
             break
         else:
