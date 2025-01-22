@@ -1,4 +1,10 @@
+import math
+import random
+
+from objects.board import Board
 from objects.enums import PlayerColour
+from objects.helpers import copy_board
+from objects.token import Token
 
 
 class Player:
@@ -26,5 +32,15 @@ class Player:
 
 
 class Computer(Player):
-    def best_move(self):
-        pass
+    def best_move(self, board: Board):
+        best_score = -math.inf
+        best_col = random.choice(range(board.cols))
+        for col in range(board.cols):
+            if board.is_valid_column(col):
+                temp_board = copy_board(board)
+                row, _ = temp_board.place_token(Token(self.colour, True), col)
+                score = -math.inf  # todo: implemented minimax
+                if score > best_score:
+                    best_score = score
+                    best_col = col
+        return best_col
