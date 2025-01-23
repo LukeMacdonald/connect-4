@@ -134,8 +134,9 @@ class Board:
 
         def count_tokens(line):
             computer_count = line.count(computer_token)
+
             player_count = line.count(player_token)
-            if computer_count > player_count:
+            if computer_count > 0 and player_count == 0:
                 return 10**computer_count
             elif (
                 player_count > 0 and computer_count == 0
